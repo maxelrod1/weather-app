@@ -1,22 +1,23 @@
 import './styles/index.css';
-
-console.log('Weather App Initialized');
+import { WeatherForm } from './components/WeatherForm';
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
-  const app = document.getElementById('app');
+  const container = document.querySelector('.container');
   
-  if (!app) {
-    console.error('App element not found');
+  if (!container) {
+    console.error('Container element not found');
     return;
   }
   
-  // Remove loading message
-  const loadingElement = app.querySelector('.loading');
-  if (loadingElement) {
-    loadingElement.textContent = 'Weather app is ready!';
-  }
+  // Create weather form
+  const weatherForm = new WeatherForm(container as HTMLElement);
   
-  console.log('App loaded successfully');
+  // Handle form submission
+  weatherForm.onSubmit((zipCode) => {
+    console.log('Zip code submitted:', zipCode);
+    // TODO: Story 1.3 will implement actual weather fetching
+    alert(`Weather lookup for zip code: ${zipCode}\n\n(API integration coming in Story 1.3)`);
+  });
 });
 
