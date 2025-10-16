@@ -6,6 +6,8 @@ A simple, fast, and beautiful weather application that fetches current weather c
 
 **Built with ❤️ by Howling Tempest using the BMAD Method**
 
+> 🔗 **GitHub Repository:** [maxelrod1/weather-app](https://github.com/maxelrod1/weather-app)
+
 ## 🌤️ Features
 
 - Enter any US zip code to get current weather conditions
