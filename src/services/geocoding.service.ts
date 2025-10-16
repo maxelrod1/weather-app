@@ -1,14 +1,28 @@
 /**
  * Geocoding service - Convert zip codes to coordinates
- * Uses US Census Geocoding API
+ * Uses zippopotam.us API (free, no key required, CORS-enabled)
  */
 
 import { httpGet, toApiError } from './http.client';
 import { GeocodeResult, Coordinates } from '../types/coordinates.types';
-import { CensusGeocodeResponse } from '../types/api.types';
 
-const CENSUS_GEOCODING_BASE_URL =
-  'https://geocoding.geo.census.gov/geocoder/locations/onelineaddress';
+const ZIPPOPOTAM_BASE_URL = 'https://api.zippopotam.us/us';
+
+/**
+ * Zippopotam API response format
+ */
+interface ZippopotamResponse {
+  'post code': string;
+  country: string;
+  'country abbreviation': string;
+  places: Array<{
+    'place name': string;
+    longitude: string;
+    latitude: string;
+    state: string;
+    'state abbreviation': string;
+  }>;
+}
 
 /**
  * Convert zip code to geographic coordinates
@@ -18,33 +32,30 @@ const CENSUS_GEOCODING_BASE_URL =
  */
 export async function geocodeZipCode(zipCode: string): Promise<GeocodeResult> {
   try {
-    const url = `${CENSUS_GEOCODING_BASE_URL}?address=${zipCode}&benchmark=2020&format=json`;
+    const url = `${ZIPPOPOTAM_BASE_URL}/${zipCode}`;
 
-    const response = await httpGet<CensusGeocodeResponse>(url);
+    const response = await httpGet<ZippopotamResponse>(url);
 
     // Check if we got any results
-    if (!response.result?.addressMatches || response.result.addressMatches.length === 0) {
+    if (!response.places || response.places.length === 0) {
       throw new Error('Zip code not found or invalid');
     }
 
-    const match = response.result.addressMatches[0];
+    const place = response.places[0];
 
-    // Extract coordinates (Note: Census API returns x=longitude, y=latitude)
+    // Extract coordinates
     const coordinates: Coordinates = {
-      latitude: match.coordinates.y,
-      longitude: match.coordinates.x,
-      displayName: formatLocationName(
-        match.addressComponents.city,
-        match.addressComponents.state
-      ),
+      latitude: parseFloat(place.latitude),
+      longitude: parseFloat(place.longitude),
+      displayName: formatLocationName(place['place name'], place['state abbreviation']),
     };
 
     const result: GeocodeResult = {
       coordinates,
-      address: match.matchedAddress,
-      city: match.addressComponents.city,
-      state: match.addressComponents.state,
-      zipCode: match.addressComponents.zip,
+      address: `${place['place name']}, ${place['state abbreviation']} ${zipCode}`,
+      city: place['place name'],
+      state: place['state abbreviation'],
+      zipCode: response['post code'],
     };
 
     return result;

@@ -12,23 +12,19 @@ export interface ApiError {
 }
 
 /**
- * US Census Geocoding API response
+ * Zippopotam API response (alternative geocoding API)
  */
-export interface CensusGeocodeResponse {
-  result: {
-    addressMatches: Array<{
-      coordinates: {
-        x: number; // longitude
-        y: number; // latitude
-      };
-      addressComponents: {
-        city: string;
-        state: string;
-        zip: string;
-      };
-      matchedAddress: string;
-    }>;
-  };
+export interface ZippopotamResponse {
+  'post code': string;
+  country: string;
+  'country abbreviation': string;
+  places: Array<{
+    'place name': string;
+    longitude: string;
+    latitude: string;
+    state: string;
+    'state abbreviation': string;
+  }>;
 }
 
 /**

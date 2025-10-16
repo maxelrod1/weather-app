@@ -1,5 +1,19 @@
 # External APIs
 
+## Zippopotam.us Geocoding API
+
+- **Purpose:** Convert US zip codes to geographic coordinates (latitude/longitude)
+- **Documentation:** https://www.zippopotam.us/
+- **Base URL(s):** `https://api.zippopotam.us/us`
+- **Authentication:** None required (public API)
+- **Rate Limits:** Fair use policy, no strict limits
+- **CORS:** Enabled (works from browser)
+
+**Key Endpoints Used:**
+- `GET /us/{zipcode}` - Get location data for US zip code
+
+**Integration Notes:** Zippopotam.us is a free, no-registration geocoding API that works perfectly for zip code lookups. It supports CORS, making it ideal for browser-based applications. Returns city name, state, latitude, and longitude.
+
 ## National Weather Service API
 
 - **Purpose:** Fetch current weather conditions, forecasts, and location data for US zip codes
