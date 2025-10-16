@@ -1,5 +1,6 @@
 /* Component styles */
 @import './components.css';
+@import './weather-display.css';
 
 @tailwind base;
 @tailwind components;
