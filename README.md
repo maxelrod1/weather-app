@@ -1,6 +1,10 @@
-# Weather App by Zip Code
+# Weather App by Zip Code ☀️⛈️
 
 A simple, fast, and beautiful weather application that fetches current weather conditions for any US zip code using the National Weather Service API.
+
+**🌐 Live Demo:** Coming soon! (Deploy with `npm install -g vercel && vercel`)
+
+**Built with ❤️ by Howling Tempest using the BMAD Method**
 
 ## 🌤️ Features
 
@@ -109,12 +113,35 @@ npm run test:e2e          # Run end-to-end tests
 
 This project was built using the **BMAD Method** (Breakthrough Method for Agile AI-Driven Development), a structured framework that uses AI agents to guide development from concept to deployment.
 
+## 🚀 Deployment
+
+This app is ready to deploy to Vercel, Netlify, or GitHub Pages!
+
+### Quick Deploy to Vercel
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Deploy (follow prompts)
+vercel
+
+# Deploy to production
+vercel --prod
+```
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
+
 ## 📝 License
 
 MIT License - feel free to use this project for learning and personal use.
 
+See [LICENSE](./LICENSE) for details.
+
 ## 🙏 Acknowledgments
 
 - Weather data provided by the National Weather Service
+- Geocoding by Zippopotam.us
 - Built with the BMAD Method framework
+- © Howling Tempest, 2025
 
