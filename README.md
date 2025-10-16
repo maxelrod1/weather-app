@@ -2,7 +2,7 @@
 
 A simple, fast, and beautiful weather application that fetches current weather conditions for any US zip code using the National Weather Service API.
 
-**🌐 Live Demo:** [https://weather-l15vy3xt7-mikeaxelrod-4034s-projects.vercel.app](https://weather-l15vy3xt7-mikeaxelrod-4034s-projects.vercel.app)
+**🌐 Live Demo:** [https://bmad-learn.vercel.app](https://bmad-learn.vercel.app)
 
 **Built with ❤️ by Howling Tempest using the BMAD Method**
 
