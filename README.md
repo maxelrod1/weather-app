@@ -15,6 +15,54 @@ A simple, fast, and beautiful weather application that fetches current weather c
 - Clean, responsive design that works on mobile, tablet, and desktop
 - Fast loading with modern build tools (Vite)
 - Zero cost - uses free weather APIs and hosting
+- **API Journey Visualization** - See the multi-step API process in action
+
+## ✨ API Journey Visualization
+
+This app includes an educational **API Journey Animation** that visualizes the multi-step process of fetching weather data. When you submit a zip code, you'll see:
+
+1. 🗺️ **Geocoding Stage** - Converting zip code to coordinates
+2. ☁️ **Weather Stage** - Fetching weather data from NWS
+3. ✅ **Complete Stage** - Success! Ready to display results
+
+### Educational Value
+
+This feature demonstrates:
+- **Sequential async operations** - How to coordinate multiple API calls
+- **State-driven animations** - Using component state to drive visual feedback
+- **Timing coordination** - Ensuring minimum display durations for user comprehension
+- **Queue-based processing** - Handling fast API responses (cached data) gracefully
+
+### Accessibility Features
+
+- **Screen reader support** - ARIA live regions announce each stage
+- **Reduced motion** - Respects `prefers-reduced-motion` user preference
+- **Keyboard navigation** - Doesn't trap focus or interfere with keyboard users
+- **Mobile optimized** - 60fps animations using GPU-accelerated transforms
+
+### Code Example
+
+```typescript
+import { ApiJourneyAnimation } from './components/ApiJourneyAnimation';
+
+// Initialize the animation
+const apiJourney = new ApiJourneyAnimation(containerElement);
+
+// Show and update stages during async operations
+apiJourney.show();
+await apiJourney.updateStage('geocoding');
+const geocoded = await geocodeZipCode(zipCode);
+
+await apiJourney.updateStage('weather');
+const weather = await getWeather(geocoded.coordinates);
+
+await apiJourney.updateStage('complete');
+apiJourney.hide();
+```
+
+📚 **Learn More:**
+- [Epic 2 - API Journey Visualization](./docs/prd/epic-2-api-journey-visualization.md)
+- [Brainstorming Session](./docs/brainstorming-session-results.md)
 
 ## 🛠️ Tech Stack
 
