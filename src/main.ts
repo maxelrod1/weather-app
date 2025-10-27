@@ -1,7 +1,8 @@
 import './styles/index.css';
 import { WeatherForm } from './components/WeatherForm';
 import { WeatherDisplay } from './components/WeatherDisplay';
-import { LoadingSpinner } from './components/LoadingSpinner';
+// import { LoadingSpinner } from './components/LoadingSpinner'; // Keep for rollback
+import { ApiJourneyAnimation } from './components/ApiJourneyAnimation';
 import { ErrorMessage } from './components/ErrorMessage';
 import { geocodeZipCode } from './services/geocoding.service';
 import { getWeatherByCoordinates } from './services/weather.service';
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Create components
   const weatherForm = new WeatherForm(container as HTMLElement);
   const weatherDisplay = new WeatherDisplay(container as HTMLElement);
-  const loadingSpinner = new LoadingSpinner(document.body);
+  const apiJourney = new ApiJourneyAnimation(container as HTMLElement);
   const errorMessage = new ErrorMessage(container as HTMLElement);
   
   // Store last zip code for retry functionality
@@ -31,8 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // Hide any previous errors
       errorMessage.hide();
       
-      // Show loading spinner
-      loadingSpinner.show();
+      // Show API journey animation
+      apiJourney.show();
+      await apiJourney.updateStage('geocoding');
       
       console.log('Fetching weather for:', zipCode);
       
@@ -41,20 +43,27 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Geocoded to:', geocodeResult.coordinates.displayName);
       
       // Step 2: Fetch weather data
+      await apiJourney.updateStage('weather');
       const weatherData = await getWeatherByCoordinates(
         geocodeResult.coordinates,
         zipCode
       );
       
-      // Hide loading spinner
-      loadingSpinner.hide();
+      // Show completion stage
+      await apiJourney.updateStage('complete');
+      
+      // Brief delay to show "complete" state before displaying results
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Hide animation
+      apiJourney.hide();
       
       // Display weather data in beautiful UI
       weatherDisplay.display(weatherData);
       
     } catch (error) {
-      // Hide loading spinner
-      loadingSpinner.hide();
+      // Hide animation on error
+      apiJourney.hide();
       
       // Get user-friendly error message
       const friendlyMessage = getUserFriendlyErrorMessage(error);

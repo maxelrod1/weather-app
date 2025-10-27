@@ -12,22 +12,18 @@ describe('geocodeZipCode', () => {
 
   it('should successfully geocode a valid zip code', async () => {
     const mockResponse = {
-      result: {
-        addressMatches: [
-          {
-            coordinates: {
-              x: -73.9857,
-              y: 40.7484,
-            },
-            addressComponents: {
-              city: 'New York',
-              state: 'NY',
-              zip: '10001',
-            },
-            matchedAddress: '10001, New York, NY',
-          },
-        ],
-      },
+      'post code': '10001',
+      country: 'United States',
+      'country abbreviation': 'US',
+      places: [
+        {
+          'place name': 'New York',
+          longitude: '-73.9857',
+          latitude: '40.7484',
+          state: 'New York',
+          'state abbreviation': 'NY',
+        },
+      ],
     };
 
     vi.mocked(httpClient.httpGet).mockResolvedValue(mockResponse);
@@ -40,7 +36,7 @@ describe('geocodeZipCode', () => {
         longitude: -73.9857,
         displayName: 'New York, NY',
       },
-      address: '10001, New York, NY',
+      address: 'New York, NY 10001',
       city: 'New York',
       state: 'NY',
       zipCode: '10001',
@@ -53,18 +49,19 @@ describe('geocodeZipCode', () => {
 
   it('should throw error for zip code with no matches', async () => {
     const mockResponse = {
-      result: {
-        addressMatches: [],
-      },
+      'post code': '00000',
+      country: 'United States',
+      'country abbreviation': 'US',
+      places: [], // Empty places array means not found
     };
 
     vi.mocked(httpClient.httpGet).mockResolvedValue(mockResponse);
     vi.mocked(httpClient.toApiError).mockReturnValue({
       message: 'Zip code not found or invalid',
-      code: 'NOT_FOUND',
+      code: 'UNKNOWN',
     });
 
-    await expect(geocodeZipCode('00000')).rejects.toThrow();
+    await expect(geocodeZipCode('00000')).rejects.toThrow('Invalid zip code or location not found');
   });
 
   it('should handle network errors', async () => {
@@ -92,19 +89,18 @@ describe('geocodeZipCode', () => {
 
   it('should format location name correctly', async () => {
     const mockResponse = {
-      result: {
-        addressMatches: [
-          {
-            coordinates: { x: -122.4194, y: 37.7749 },
-            addressComponents: {
-              city: 'San Francisco',
-              state: 'CA',
-              zip: '94102',
-            },
-            matchedAddress: 'San Francisco, CA 94102',
-          },
-        ],
-      },
+      'post code': '94102',
+      country: 'United States',
+      'country abbreviation': 'US',
+      places: [
+        {
+          'place name': 'San Francisco',
+          longitude: '-122.4194',
+          latitude: '37.7749',
+          state: 'California',
+          'state abbreviation': 'CA',
+        },
+      ],
     };
 
     vi.mocked(httpClient.httpGet).mockResolvedValue(mockResponse);

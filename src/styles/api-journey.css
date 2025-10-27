@@ -1,0 +1,246 @@
+/**
+ * API Journey Animation Styles
+ * 
+ * EDUCATIONAL NOTE: Performance-Optimized Animations
+ * 
+ * These styles use CSS transforms and opacity for animations because:
+ * 1. GPU-accelerated (transforms, opacity)
+ * 2. No layout thrashing (avoids reflow/repaint)
+ * 3. Smooth 60fps animations
+ * 4. Works well on mobile devices
+ * 
+ * Avoid animating: top, left, width, height (causes reflow)
+ * Prefer animating: transform, opacity (GPU-accelerated)
+ */
+
+/* Container - full screen overlay */
+.api-journey {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.api-journey--visible {
+  opacity: 1;
+}
+
+/* Overlay background */
+.api-journey__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Content container */
+.api-journey__content {
+  background-color: white;
+  border-radius: 16px;
+  padding: 32px 48px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 90%;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+/* Stages container - horizontal layout */
+.api-journey__stages {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: nowrap;
+}
+
+/* Individual stage */
+.api-journey__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0.4;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  transform: scale(0.9);
+}
+
+/* Active stage */
+.api-journey__stage--active {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Completed stage */
+.api-journey__stage--completed {
+  opacity: 0.7;
+  transform: scale(1);
+}
+
+/* Stage icon */
+.api-journey__stage-icon {
+  font-size: 48px;
+  line-height: 1;
+  transition: transform 0.3s ease-in-out;
+}
+
+.api-journey__stage--active .api-journey__stage-icon {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Icon pulse animation for active stage */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* Stage label */
+.api-journey__stage-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary, #1e293b);
+  text-align: center;
+  white-space: nowrap;
+  max-width: 160px;
+}
+
+.api-journey__stage--active .api-journey__stage-label {
+  font-weight: 600;
+  color: var(--color-primary, #3b82f6);
+}
+
+/* Arrow between stages */
+.api-journey__stage-arrow {
+  font-size: 32px;
+  color: var(--color-text-secondary, #94a3b8);
+  opacity: 0.5;
+  margin: 0 8px;
+  align-self: center;
+}
+
+.api-journey__stage--active + .api-journey__stage .api-journey__stage-arrow {
+  opacity: 1;
+  animation: arrow-flow 1s ease-in-out infinite;
+}
+
+/* Arrow flow animation */
+@keyframes arrow-flow {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(8px);
+    opacity: 0.5;
+  }
+}
+
+/* Responsive - Mobile adjustments */
+@media (max-width: 768px) {
+  .api-journey__content {
+    padding: 24px 16px;
+  }
+
+  .api-journey__stages {
+    gap: 16px;
+  }
+
+  .api-journey__stage-icon {
+    font-size: 36px;
+  }
+
+  .api-journey__stage-label {
+    font-size: 12px;
+    max-width: 100px;
+    white-space: normal;
+  }
+
+  .api-journey__stage-arrow {
+    font-size: 24px;
+    margin: 0 4px;
+  }
+}
+
+/* Very small screens - stack vertically */
+@media (max-width: 480px) {
+  .api-journey__stages {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .api-journey__stage {
+    width: 100%;
+  }
+
+  .api-journey__stage-arrow {
+    transform: rotate(90deg);
+    margin: 8px 0;
+  }
+
+  .api-journey__stage-label {
+    max-width: 200px;
+  }
+}
+
+/**
+ * Accessibility: Reduced Motion Support
+ * 
+ * EDUCATIONAL NOTE: Respecting User Preferences
+ * 
+ * Users with vestibular disorders or motion sensitivities can enable
+ * "reduced motion" in their OS settings. We respect this preference by
+ * disabling or simplifying animations while maintaining functionality.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .api-journey,
+  .api-journey__stage,
+  .api-journey__stage-icon,
+  .api-journey__stage-label,
+  .api-journey__stage-arrow {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .api-journey__stage--active .api-journey__stage-icon {
+    animation: none;
+  }
+
+  .api-journey__stage--active + .api-journey__stage .api-journey__stage-arrow {
+    animation: none;
+  }
+}
+
+/* Dark mode support (optional future enhancement) */
+@media (prefers-color-scheme: dark) {
+  .api-journey__content {
+    background-color: #1e293b;
+  }
+
+  .api-journey__stage-label {
+    color: #e2e8f0;
+  }
+
+  .api-journey__stage--active .api-journey__stage-label {
+    color: #60a5fa;
+  }
+
+  .api-journey__stage-arrow {
+    color: #64748b;
+  }
+}
+
