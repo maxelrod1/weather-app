@@ -7,7 +7,6 @@ import { ApiError } from '../types/api.types';
 /**
  * HTTP client configuration
  */
-const USER_AGENT = 'WeatherApp/1.0 (Educational Project)';
 const REQUEST_TIMEOUT = 10000; // 10 seconds
 
 /**
@@ -59,7 +58,6 @@ export async function httpGet<T>(url: string): Promise<T> {
     const response = await fetchWithTimeout(url, {
       method: 'GET',
       headers: {
-        'User-Agent': USER_AGENT,
         'Accept': 'application/json',
       },
     });
