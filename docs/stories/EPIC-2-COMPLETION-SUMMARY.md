@@ -288,6 +288,23 @@ const weather = await getWeather(geocoded.coordinates);
 
 ---
 
+## 🔧 Post-Deployment Fixes
+
+### Safari Compatibility Fix (October 28, 2025)
+**Issue:** Application failed on Safari with "Having trouble finding location..." error  
+**Root Cause:** HTTP client was setting `User-Agent` header, which is a forbidden header in Fetch API  
+**Impact:** Chrome silently ignored the forbidden header, but Safari strictly enforced the specification  
+
+**Solution:**
+- Removed `User-Agent` header from `httpGet()` function in `http.client.ts`
+- Browser automatically sets appropriate User-Agent header
+- Fix ensures cross-browser compatibility
+
+**Commit:** `50dbd58` - Fix Safari compatibility by removing forbidden User-Agent header  
+**Result:** ✅ Application now works correctly on all browsers (Chrome, Safari, Firefox, Edge)
+
+---
+
 ## 🚀 Deployment Readiness
 
 ### Production Ready ✅
@@ -296,6 +313,7 @@ const weather = await getWeather(geocoded.coordinates);
 - Performance optimized
 - Accessibility verified
 - Documentation complete
+- Cross-browser compatibility verified (Chrome, Safari, Firefox, Edge)
 - Backward compatible (LoadingSpinner preserved for rollback)
 
 ### Pre-Deployment Checklist
@@ -394,4 +412,5 @@ All three stories delivered:
 **Date:** Monday, October 27, 2025  
 
 🎉 **Congratulations on completing Epic 2!** 🎉
+
 
